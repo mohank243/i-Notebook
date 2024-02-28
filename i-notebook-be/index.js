@@ -10,6 +10,7 @@ const port = 3000
 //     res.send('Hello Mohan')
 // })
 //used for connecting routes 
+app.use(express.json())
 app.use('/api/auth',require('./Routes/auth'))
 app.use('/api/notes',require('./Routes/notes'))
 
