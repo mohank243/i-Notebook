@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const noteSchema = new Schema({
+    //Adding the foreign of user for fetching notes
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user'
+    },
     title: {
         type:String,
         required: true
