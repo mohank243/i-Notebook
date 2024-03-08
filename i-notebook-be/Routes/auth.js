@@ -60,6 +60,7 @@ router.post('/login',[
 ], async (req, res)=>{
        const {email , password} = req.body
        const errors = validationResult(req);
+       let success = false;
        if (!errors.isEmpty()) {
               return res.status(400).json({ errors: errors.array() });
        }
@@ -67,12 +68,14 @@ router.post('/login',[
               let user = await users.findOne({email})
               //check whether user is valid
               if(!user){
-                    return res.status(400).json({error: 'Please provide the correct Credentials'})
+                     success=false
+                    return res.status(400).json({success:success, error: 'Please provide the correct Credentials'})
               }
               //compare userPassword with hashed password in DB
               const passwordCompare = await bcrypt.compare(password,user.password)
               if(!passwordCompare){
-                   return res.status(400).json({error: 'Please provide the correct Credentials'})
+                     success=false
+                   return res.status(400).json({ success:success, error: 'Please provide the correct Credentials'})
               }
                //Implementing JWT for Authentication
               const data = {
@@ -81,7 +84,8 @@ router.post('/login',[
                      }
               }
               const authToken = jwt.sign(data, 'MohanIsAGoodBoy');
-              res.json({ authToken })
+              success = true;
+              res.json({ success:success,authtoken:authToken })
 
        } catch (error) {
               console.error(error.message);
