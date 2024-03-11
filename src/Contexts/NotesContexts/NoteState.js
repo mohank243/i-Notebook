@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
+import alertContext from "../AlertContexts/alertContext";
 import  NoteContext  from "./noteContext";
 
 const NoteState = (props)=>{
     const hostName = "http://localhost:5000";
     const intialNotes = []
+    let {showAlert}= useContext(alertContext);
 
       const getAllNotes = async ()=>{
         const response = await fetch(hostName+'/api/notes/fetchallnotes', {
           method: "GET", // *GET, POST, PUT, DELETE, etc.
           headers: {
             "Content-Type": "application/json",
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlMThiNWNiNGQ1YTMzZWMzYTAyYTFkIn0sImlhdCI6MTcwOTQ1Mjg3M30.VrrX7DPLv6NAqZCj6HofUuTXCfLyJB60nVxzTgb_W2I"
+            "auth-token": localStorage.getItem("jwttoken")
           },
          
         });
@@ -27,7 +29,7 @@ const NoteState = (props)=>{
           
           headers: {
             "Content-Type": "application/json",
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlMThiNWNiNGQ1YTMzZWMzYTAyYTFkIn0sImlhdCI6MTcwOTQ1Mjg3M30.VrrX7DPLv6NAqZCj6HofUuTXCfLyJB60nVxzTgb_W2I"
+            "auth-token": localStorage.getItem("jwttoken")
           },
          
           body: JSON.stringify({title, description, tag}), // body data type must match "Content-Type" header
@@ -44,13 +46,16 @@ const NoteState = (props)=>{
           
           headers: {
             "Content-Type": "application/json",
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlMThiNWNiNGQ1YTMzZWMzYTAyYTFkIn0sImlhdCI6MTcwOTQ1Mjg3M30.VrrX7DPLv6NAqZCj6HofUuTXCfLyJB60nVxzTgb_W2I"
+            "auth-token": localStorage.getItem("jwttoken")
           },
         
         });
         const note = await response.json(); 
+        console.log(note)
         const newNotes = notes.filter((note)=>note._id!==id)
         setNotes(newNotes)
+        showAlert('success' ,'Note Deleted Successfully')
+
       } 
 
       //Edit a Note
@@ -61,13 +66,14 @@ const NoteState = (props)=>{
           
           headers: {
             "Content-Type": "application/json",
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlMThiNWNiNGQ1YTMzZWMzYTAyYTFkIn0sImlhdCI6MTcwOTQ1Mjg3M30.VrrX7DPLv6NAqZCj6HofUuTXCfLyJB60nVxzTgb_W2I"
+            "auth-token": localStorage.getItem("jwttoken")
           },
          
           body: JSON.stringify({title, description, tag}), // body data type must match "Content-Type" header
          
         });
         const note = await response.json(); 
+        console.log(note)
         const newNotes = JSON.parse(JSON.stringify(notes))//deepcopy of notes object i.e the noteObject had updated but not rendered becuase it state not updated
         for (let index = 0; index < newNotes.length; index++) {
           const element = newNotes[index];

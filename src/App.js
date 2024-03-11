@@ -11,23 +11,28 @@ import NoteState from "./Contexts/NotesContexts/NoteState";
 import Alert from "./Components/Alert";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
-function App() {
+import AlertState from "./Contexts/AlertContexts/AlertState";
+
+ function App() {
+  
   return (
     <>
-      <NoteState>
-        <Router>
-          <Navbar />
-          <Alert/>
-          <div className="conatainer">
-            <Routes>
-              <Route exact path="/" element={<Home />} />
-              <Route exact path="/about" element={<About />} />
-              <Route exact path="/login" element={<Login />} />
-              <Route exact path="/signup" element={<Signup />} />
-            </Routes>
-          </div>
-        </Router>
-      </NoteState>
+      <AlertState>
+        <NoteState>
+          <Router>
+            <Navbar />
+            <Alert/>
+            <div className="conatainer">
+              <Routes>
+                <Route exact path="/" element={<Home />} />
+                <Route exact path="/about" element={<About />} />
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/signup" element={<Signup />} />
+              </Routes>
+            </div>
+          </Router>
+        </NoteState>
+      </AlertState>
     </>
   );
 }

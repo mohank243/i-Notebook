@@ -15,10 +15,11 @@ router.post('/createuser',[
        body('email', "provide the correct email").isEmail(),
        body('password', 'password should consist atleast 5 chars').isLength({min:5})
 ], async (req,res) =>{
+       let success = false;
        console.log(req.body)
        const errors = validationResult(req);
        if (!errors.isEmpty()) {
-              return res.status(400).json({ errors: errors.array() });
+              return res.status(400).json({ success, errors: errors.array() });
        }
        try{
        // res.send(req.body) //Cannot set headers after they are sent to the client
@@ -26,7 +27,7 @@ router.post('/createuser',[
        // user.save()//saving into the DB
       let user = await users.findOne({email:req.body.email})
       if(user){
-       return res.status(400).json({error: 'User with email is already exists'})
+       return res.status(400).json({ success ,error: 'User with email is already exists'})
       }
       //Generating hash from the user Password
       const salt = await bcrypt.genSaltSync(10);
@@ -44,7 +45,8 @@ router.post('/createuser',[
               }
        }
        const authToken = jwt.sign(data, 'MohanIsAGoodBoy');
-          res.json({authToken})
+          success = true
+          res.json({success, authtoken:authToken})
        }
        catch(error){
               console.error(error.message);

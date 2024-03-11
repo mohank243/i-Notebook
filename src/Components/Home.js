@@ -6,7 +6,7 @@ function Home() {
   
   return (
     <>
-      <div className="container">
+      <div className="container my-2">
           <AddNote/>
           <Notes/>
       </div>
